@@ -31,7 +31,7 @@ class MainActivity : ComponentActivity() {
                 Scaffold(
                     modifier = Modifier.fillMaxSize(),
                     ) { innerPadding ->
-                    SafeNavHost(
+                    HushletNavHost(
                         modifier = Modifier
                             .fillMaxSize()
                             .padding(innerPadding),
@@ -48,7 +48,7 @@ class MainActivity : ComponentActivity() {
 
 
 @Composable
-fun SafeNavHost(modifier: Modifier = Modifier, navHostController: NavHostController) {
+fun HushletNavHost(modifier: Modifier = Modifier, navHostController: NavHostController) {
     NavHost(
         navController = navHostController,
         modifier = modifier,
