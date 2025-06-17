@@ -1,8 +1,8 @@
-package cypher.hushlet.data.datasources.local.db.cards
+package cypher.hushlet.features.dashboard.data.datasources.local.db.cards
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import cypher.hushlet.utils.AppConstants
+import cypher.hushlet.core.utils.AppConstants
 
 @Entity(tableName = AppConstants.CARDS_TABLE)
 data class CardsTable(

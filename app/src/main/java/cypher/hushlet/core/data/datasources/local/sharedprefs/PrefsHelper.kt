@@ -1,9 +1,8 @@
-package cypher.hushlet.data.datasources.local.sharedprefs
+package cypher.hushlet.features.dashboard.data.datasources.local.sharedprefs
 
 import android.content.Context
 import android.content.SharedPreferences
-import cypher.hushlet.utils.AppConstants
-import kotlinx.serialization.EncodeDefault
+import cypher.hushlet.core.utils.AppConstants
 
 class PrefsHelper(preferences: SharedPreferences) {
     companion object {

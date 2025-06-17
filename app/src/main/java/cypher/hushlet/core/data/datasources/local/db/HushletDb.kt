@@ -1,14 +1,14 @@
-package cypher.hushlet.data.datasources.local.db
+package cypher.hushlet.features.dashboard.data.datasources.local.db
 
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import cypher.hushlet.data.datasources.local.db.cards.CardsDao
-import cypher.hushlet.data.datasources.local.db.cards.CardsTable
-import cypher.hushlet.data.datasources.local.db.credentials.CredentialsDao
-import cypher.hushlet.data.datasources.local.db.credentials.CredentialsTable
-import cypher.hushlet.utils.AppConstants
+import cypher.hushlet.features.dashboard.data.datasources.local.db.cards.CardsDao
+import cypher.hushlet.features.dashboard.data.datasources.local.db.cards.CardsTable
+import cypher.hushlet.features.dashboard.data.datasources.local.db.credentials.CredentialsDao
+import cypher.hushlet.features.dashboard.data.datasources.local.db.credentials.CredentialsTable
+import cypher.hushlet.core.utils.AppConstants
 
 @Database(
     entities = [CardsTable::class, CredentialsTable::class],
