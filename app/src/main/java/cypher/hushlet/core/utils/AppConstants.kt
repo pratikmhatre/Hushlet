@@ -1,8 +1,8 @@
-package cypher.hushlet.utils
+package cypher.hushlet.core.utils
 
 object AppConstants {
     const val HUSHLET_DB_NAME = "Hushlet.Db"
     const val HUSHLET_DB_VERSION = 1
-    const val CREDENTIALS_TABLE = "credentials"
-    const val CARDS_TABLE = "cards"
+    const val ACCOUNT_TABLE = "account"
+    const val CARD_TABLE = "card"
 }

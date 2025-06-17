@@ -1,4 +1,4 @@
-package cypher.hushlet.features.dashboard.data.datasources.local.sharedprefs
+package cypher.hushlet.core.data.datasources.local.sharedprefs
 
 import android.content.Context
 import android.content.SharedPreferences
@@ -13,7 +13,7 @@ class PrefsHelper(preferences: SharedPreferences) {
         }
 
         private fun createPrefs(context: Context): SharedPreferences {
-            return context.getSharedPreferences(AppConstants.CARDS_TABLE, Context.MODE_PRIVATE)
+            return context.getSharedPreferences(AppConstants.CARD_TABLE, Context.MODE_PRIVATE)
         }
     }
 }

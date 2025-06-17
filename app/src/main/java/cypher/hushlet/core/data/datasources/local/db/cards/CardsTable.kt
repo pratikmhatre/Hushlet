@@ -1,22 +1,22 @@
-package cypher.hushlet.features.dashboard.data.datasources.local.db.cards
+package cypher.hushlet.core.data.datasources.local.db.cards
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import cypher.hushlet.core.utils.AppConstants
 
-@Entity(tableName = AppConstants.CARDS_TABLE)
+@Entity(tableName = AppConstants.CARD_TABLE)
 data class CardsTable(
-    @PrimaryKey(autoGenerate = true) val id: Int,
-    val cardNumber: Int,
-    val expiryMonth: Int,
-    val expiryYear: Int,
-    val securityCode: Int,
-    val cardName: String,
-    val cardType:String,
-    val cardHolderName: String,
-    val notes: String,
-    val isFavourite: Boolean = false,
-    val isArchived: Boolean = false,
-    val createdAt: Int,
-    val updatedAt: Int
+    @PrimaryKey(autoGenerate = true) val id: Long = 0L,
+    var cardNumber: String,
+    var expiryMonth: String?,
+    var expiryYear: String?,
+    var securityCode: Int?,
+    var cardName: String,
+    var cardType: String?,
+    var cardHolderName: String?,
+    var notes: String = "",
+    var isFavourite: Boolean = false,
+    var isArchived: Boolean = false,
+    val createdAt: Long,
+    var updatedAt: Long
 )

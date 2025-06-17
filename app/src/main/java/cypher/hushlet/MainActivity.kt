@@ -19,7 +19,7 @@ import cypher.hushlet.ui.screes.AddNewCredential
 import cypher.hushlet.ui.screes.AddNewCredentialScreen
 import cypher.hushlet.ui.screes.Pager
 import cypher.hushlet.ui.screes.PagerScreen
-import cypher.hushlet.ui.theme.HushletTheme
+import cypher.hushlet.core.theme.HushletTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -1,4 +1,4 @@
-package cypher.hushlet.ui.theme
+package cypher.hushlet.core.theme
 
 import androidx.compose.ui.graphics.Color
 

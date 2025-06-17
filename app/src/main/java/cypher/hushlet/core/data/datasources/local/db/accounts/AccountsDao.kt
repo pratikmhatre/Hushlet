@@ -1,4 +1,4 @@
-package cypher.hushlet.core.data.datasources.local.db.credentials
+package cypher.hushlet.core.data.datasources.local.db.accounts
 
 import androidx.room.Dao
 import androidx.room.Delete
@@ -7,7 +7,6 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import cypher.hushlet.core.data.datasources.local.db.models.AccountDto
-import cypher.hushlet.core.data.datasources.local.db.models.CardDto
 import cypher.hushlet.core.utils.AppConstants
 
 @Dao
@@ -27,6 +26,9 @@ interface AccountsDao {
     @Query("DELETE FROM ${AppConstants.ACCOUNT_TABLE}")
     suspend fun deleteAllAccounts()
 
+    @Query("SELECT id, title, url, isFavourite, updatedAt FROM ${AppConstants.ACCOUNT_TABLE} WHERE isArchived = 0 AND isFavourite = 1 ORDER BY updatedAt DESC")
+    suspend fun getFavouriteAccountsList(): List<AccountDto>
+
     @Query("SELECT id, title, url, isFavourite, updatedAt FROM ${AppConstants.ACCOUNT_TABLE} WHERE isArchived = 0 ORDER BY title ASC")
     suspend fun getActiveAccountsList(): List<AccountDto>
 
@@ -34,7 +36,7 @@ interface AccountsDao {
     suspend fun getArchivedAccountsList(): List<AccountDto>
 
     @Query("SELECT * FROM ${AppConstants.ACCOUNT_TABLE} WHERE id is :pk")
-    suspend fun getSingleAccount(pk: Int): AccountTable
+    suspend fun getSingleAccount(pk: Long): AccountTable?
 
     @Query(
         """
