@@ -20,10 +20,11 @@ class GetDashboardData constructor(
         }
 
         return DashboardData(
-            isFavoriteCardsEmpty = favoriteCards.isEmpty(),
+            isCardsAvailable = cardsToDisplay.isNotEmpty(),
+            isFavoriteCardsAvailable = favoriteCards.isNotEmpty(),
             cardsList = cardsToDisplay,
-            isFavoriteAccountsEmpty = favoriteAccounts.isEmpty(),
-            accountsList = accountsToDisplay
+            isFavoriteAccountsAvailable = favoriteAccounts.isNotEmpty(),
+            accountsList = accountsToDisplay, isAccountsAvailable = accountsToDisplay.isNotEmpty()
         )
     }
 }
