@@ -1,6 +1,6 @@
-package cypher.hushlet.core.data.datasources.local.db.models
+package cypher.hushlet.core.domain.models
 
-data class AccountDto(
+data class AccountListItemDto(
     val id: Long, val title: String,
     val url: String?, val isFavourite: Boolean
 )

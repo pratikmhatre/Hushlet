@@ -5,13 +5,13 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import cypher.hushlet.core.data.datasources.local.db.cards.CardsDao
-import cypher.hushlet.core.data.datasources.local.db.cards.CardsTable
+import cypher.hushlet.core.data.datasources.local.db.cards.CardEntity
 import cypher.hushlet.core.data.datasources.local.db.accounts.AccountsDao
-import cypher.hushlet.core.data.datasources.local.db.accounts.AccountTable
+import cypher.hushlet.core.data.datasources.local.db.accounts.AccountEntity
 import cypher.hushlet.core.utils.AppConstants
 
 @Database(
-    entities = [CardsTable::class, AccountTable::class],
+    entities = [CardEntity::class, AccountEntity::class],
     version = AppConstants.HUSHLET_DB_VERSION,
     exportSchema = false
 )

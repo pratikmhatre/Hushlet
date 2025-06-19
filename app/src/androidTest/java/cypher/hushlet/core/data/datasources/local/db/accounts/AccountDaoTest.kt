@@ -101,7 +101,7 @@ class AccountDaoTest {
 
             assertThat(savedAccountData).isNotNull()
 
-            val accountToUpdate = AccountTable(
+            val accountToUpdate = AccountEntity(
                 id = savedAccountData!!.id,
                 title = changedTitle,
                 username = changedUsername,
@@ -383,7 +383,7 @@ class AccountDaoTest {
 
 
     private fun getActiveAccounts(count: Int = 6) = listOf(
-        AccountTable(
+        AccountEntity(
             id = 0,
             title = "Gmail",
             username = "john.doe@gmail.com",
@@ -395,7 +395,7 @@ class AccountDaoTest {
             createdAt = System.currentTimeMillis(),
             updatedAt = 1005
         ),
-        AccountTable(
+        AccountEntity(
             id = 0,
             title = "Facebook",
             username = "john.doe.fb",
@@ -407,7 +407,7 @@ class AccountDaoTest {
             createdAt = System.currentTimeMillis(),
             updatedAt = 1001
         ),
-        AccountTable(
+        AccountEntity(
             id = 0,
             title = "Twitter",
             username = "johntweets",
@@ -419,7 +419,7 @@ class AccountDaoTest {
             createdAt = System.currentTimeMillis(),
             updatedAt = 1003
         ),
-        AccountTable(
+        AccountEntity(
             id = 0,
             title = "Netflix",
             username = "johnflix",
@@ -431,7 +431,7 @@ class AccountDaoTest {
             createdAt = System.currentTimeMillis(),
             updatedAt = 1002
         ),
-        AccountTable(
+        AccountEntity(
             id = 0,
             title = "Amazon",
             username = "johnshopper",
@@ -443,7 +443,7 @@ class AccountDaoTest {
             createdAt = System.currentTimeMillis(),
             updatedAt = 1004
         ),
-        AccountTable(
+        AccountEntity(
             id = 0,
             title = "GitHub",
             username = "johndev",
@@ -458,7 +458,7 @@ class AccountDaoTest {
     ).take(count)
 
     private fun getArchivedAccounts() = listOf(
-        AccountTable(
+        AccountEntity(
             id = 0,
             title = "Reddit",
             username = "john_reddit",
@@ -470,7 +470,7 @@ class AccountDaoTest {
             createdAt = System.currentTimeMillis(),
             updatedAt = System.currentTimeMillis()
         ),
-        AccountTable(
+        AccountEntity(
             id = 0,
             title = "Spotify",
             username = "johnmusic",
@@ -482,7 +482,7 @@ class AccountDaoTest {
             createdAt = System.currentTimeMillis(),
             updatedAt = System.currentTimeMillis()
         ),
-        AccountTable(
+        AccountEntity(
             id = 0,
             title = "Zoom",
             username = "john.zoom",
@@ -494,7 +494,7 @@ class AccountDaoTest {
             createdAt = System.currentTimeMillis(),
             updatedAt = System.currentTimeMillis()
         ),
-        AccountTable(
+        AccountEntity(
             id = 0,
             title = "Bank App",
             username = "john.bank",

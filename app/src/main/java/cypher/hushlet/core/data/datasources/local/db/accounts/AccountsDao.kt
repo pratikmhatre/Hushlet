@@ -6,37 +6,37 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
-import cypher.hushlet.core.data.datasources.local.db.models.AccountDto
+import cypher.hushlet.core.domain.models.AccountListItemDto
 import cypher.hushlet.core.utils.AppConstants
 
 @Dao
 interface AccountsDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun addAccount(account: AccountTable): Long
+    suspend fun addAccount(account: AccountEntity): Long
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun addMultipleAccounts(accounts: List<AccountTable>): List<Long>
+    suspend fun addMultipleAccounts(accounts: List<AccountEntity>): List<Long>
 
     @Update
-    suspend fun updateAccount(account: AccountTable): Int
+    suspend fun updateAccount(account: AccountEntity): Int
 
     @Delete
-    suspend fun deleteAccount(cardsTable: AccountTable): Int
+    suspend fun deleteAccount(cardsTable: AccountEntity): Int
 
     @Query("DELETE FROM ${AppConstants.ACCOUNT_TABLE}")
     suspend fun deleteAllAccounts()
 
     @Query("SELECT id, title, url, isFavourite, updatedAt FROM ${AppConstants.ACCOUNT_TABLE} WHERE isArchived = 0 AND isFavourite = 1 ORDER BY updatedAt DESC")
-    suspend fun getFavouriteAccountsList(): List<AccountDto>
+    suspend fun getFavouriteAccountsList(): List<AccountListItemDto>
 
     @Query("SELECT id, title, url, isFavourite, updatedAt FROM ${AppConstants.ACCOUNT_TABLE} WHERE isArchived = 0 ORDER BY title ASC")
-    suspend fun getActiveAccountsList(): List<AccountDto>
+    suspend fun getActiveAccountsList(): List<AccountListItemDto>
 
     @Query("SELECT id, title, url, isFavourite, updatedAt FROM ${AppConstants.ACCOUNT_TABLE} WHERE isArchived = 1 ORDER BY title ASC")
-    suspend fun getArchivedAccountsList(): List<AccountDto>
+    suspend fun getArchivedAccountsList(): List<AccountListItemDto>
 
     @Query("SELECT * FROM ${AppConstants.ACCOUNT_TABLE} WHERE id is :pk")
-    suspend fun getSingleAccount(pk: Long): AccountTable?
+    suspend fun getSingleAccount(pk: Long): AccountEntity?
 
     @Query(
         """
@@ -51,7 +51,7 @@ interface AccountsDao {
     ORDER BY title ASC
 """
     )
-    suspend fun searchActiveAccounts(query: String): List<AccountDto>
+    suspend fun searchActiveAccounts(query: String): List<AccountListItemDto>
 
     @Query(
         """
@@ -66,6 +66,9 @@ interface AccountsDao {
     ORDER BY title ASC
 """
     )
-    suspend fun searchArchivedAccounts(query: String): List<AccountDto>
+    suspend fun searchArchivedAccounts(query: String): List<AccountListItemDto>
+
+    @Query("SELECT id, title, url, isFavourite, updatedAt FROM ${AppConstants.ACCOUNT_TABLE} WHERE isArchived = 0 ORDER BY updatedAt DESC LIMIT :count")
+    suspend fun getRecentlyAddedAccounts(count: Int): List<AccountListItemDto>
 
 }

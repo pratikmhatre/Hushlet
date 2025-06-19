@@ -2,10 +2,11 @@ package cypher.hushlet.core.data.datasources.local.db.accounts
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import cypher.hushlet.core.domain.models.AccountDto
 import cypher.hushlet.core.utils.AppConstants
 
 @Entity(tableName = AppConstants.ACCOUNT_TABLE)
-data class AccountTable(
+data class AccountEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Long = 0L,
     val title: String,
@@ -17,4 +18,19 @@ data class AccountTable(
     val isArchived: Boolean = false,
     val createdAt: Long,
     val updatedAt: Long,
-)
+) {
+    fun toDto(): AccountDto {
+        return AccountDto(
+            id,
+            title,
+            username,
+            password,
+            url,
+            notes,
+            isFavourite,
+            isArchived,
+            createdAt,
+            updatedAt
+        )
+    }
+}

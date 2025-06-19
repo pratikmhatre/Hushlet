@@ -376,9 +376,9 @@ class CardsDaoTest {
     }
 
 
-    private fun getActiveCards(count: Int = 5): List<CardsTable> {
+    private fun getActiveCards(count: Int = 5): List<CardEntity> {
         val cardsList = arrayListOf(
-            CardsTable(
+            CardEntity(
                 id = 0,
                 cardNumber = "1234567890123456",
                 expiryMonth = "12",
@@ -393,7 +393,7 @@ class CardsDaoTest {
                 createdAt = System.currentTimeMillis(),
                 updatedAt = 100004
             ),
-            CardsTable(
+            CardEntity(
                 id = 0,
                 cardNumber = "6543210987654321",
                 expiryMonth = "01",
@@ -408,7 +408,7 @@ class CardsDaoTest {
                 createdAt = System.currentTimeMillis(),
                 updatedAt = 100001
             ),
-            CardsTable(
+            CardEntity(
                 id = 0,
                 cardNumber = "1112223334444555",
                 expiryMonth = "07",
@@ -423,7 +423,7 @@ class CardsDaoTest {
                 createdAt = System.currentTimeMillis(),
                 updatedAt = 100007
             ),
-            CardsTable(
+            CardEntity(
                 id = 0,
                 cardNumber = "7890123456789012",
                 expiryMonth = "03",
@@ -438,7 +438,7 @@ class CardsDaoTest {
                 createdAt = System.currentTimeMillis(),
                 updatedAt = 100000
             ),
-            CardsTable(
+            CardEntity(
                 id = 0,
                 cardNumber = "9876543210987654",
                 expiryMonth = "11",
@@ -458,7 +458,7 @@ class CardsDaoTest {
     }
 
     private fun getArchivedCards() = listOf(
-        CardsTable(
+        CardEntity(
             id = 0,
             cardNumber = "97234444555",
             expiryMonth = "07",
@@ -473,7 +473,7 @@ class CardsDaoTest {
             createdAt = System.currentTimeMillis(),
             updatedAt = System.currentTimeMillis()
         ),
-        CardsTable(
+        CardEntity(
             id = 0,
             cardNumber = "7890123427632",
             expiryMonth = "03",
@@ -488,7 +488,7 @@ class CardsDaoTest {
             createdAt = System.currentTimeMillis(),
             updatedAt = System.currentTimeMillis()
         ),
-        CardsTable(
+        CardEntity(
             id = 0,
             cardNumber = "2783497237632",
             expiryMonth = "06",

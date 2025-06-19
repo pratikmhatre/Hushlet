@@ -11,13 +11,13 @@
       <SelectionState runConfigName="AccountDaoTest">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="getFavouriteCardsReturnsOnlyFavouriteCardsInDescendingOrderOfDateUpdated()">
-        <option name="selectionMode" value="DROPDOWN" />
-      </SelectionState>
       <SelectionState runConfigName="Tests in 'cypher.hushlet.core'">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
       <SelectionState runConfigName="Tests in 'cypher.hushlet.core.data.datasources.local'">
+        <option name="selectionMode" value="DROPDOWN" />
+      </SelectionState>
+      <SelectionState runConfigName="All Tests">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
     </selectionStates>

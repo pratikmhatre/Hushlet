@@ -1,6 +1,6 @@
-package cypher.hushlet.core.data.datasources.local.db.models
+package cypher.hushlet.core.domain.models
 
-data class CardDto(
+data class CardListItemDto(
     val id: Long,
     val cardNumber: String,
     val cardName: String,
