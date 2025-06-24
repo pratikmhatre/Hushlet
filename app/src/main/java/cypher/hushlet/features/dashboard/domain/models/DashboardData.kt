@@ -4,10 +4,12 @@ import cypher.hushlet.core.domain.models.AccountListItemDto
 import cypher.hushlet.core.domain.models.CardListItemDto
 
 data class DashboardData(
-    val isCardsAvailable: Boolean,
-    val isFavoriteCardsAvailable: Boolean,
-    val cardsList: List<CardListItemDto>,
-    val isAccountsAvailable: Boolean,
-    val isFavoriteAccountsAvailable: Boolean,
-    val accountsList: List<AccountListItemDto>
+    val cardSectionContent: DashboardContent<CardListItemDto>,
+    val accountSectionContent: DashboardContent<AccountListItemDto>
 )
+
+sealed class DashboardContent<T> {
+    data class FavoriteContent<T>(val data: List<T>) : DashboardContent<T>()
+    data class RecentContent<T>(val data: List<T>) : DashboardContent<T>()
+    data class NoContent<T>(val data: List<T> = emptyList<T>()) : DashboardContent<T>()
+}

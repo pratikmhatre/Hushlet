@@ -68,7 +68,7 @@ interface AccountsDao {
     )
     suspend fun searchArchivedAccounts(query: String): List<AccountListItemDto>
 
-    @Query("SELECT id, title, url, isFavourite, updatedAt FROM ${AppConstants.ACCOUNT_TABLE} WHERE isArchived = 0 ORDER BY updatedAt DESC LIMIT :count")
+    @Query("SELECT id, title, url, isFavourite, updatedAt FROM ${AppConstants.ACCOUNT_TABLE} WHERE isArchived = 0 ORDER BY createdAt DESC LIMIT :count")
     suspend fun getRecentlyAddedAccounts(count: Int): List<AccountListItemDto>
 
 }

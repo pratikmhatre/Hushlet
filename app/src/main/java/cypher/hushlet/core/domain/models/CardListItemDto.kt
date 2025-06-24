@@ -7,5 +7,6 @@ data class CardListItemDto(
     val cardType: String?,
     val cardHolderName: String,
     val isFavourite: Boolean,
+    val isArchived: Boolean,
     val updatedAt: Long
 )

@@ -55,6 +55,8 @@ dependencies {
     implementation(libs.androidx.room.ktx)
     ksp(libs.room.compiler)
 
+    debugImplementation(libs.androidx.ui.tooling)
+    debugImplementation(libs.androidx.ui.test.manifest)
 
     testImplementation(libs.junit)
     testImplementation(libs.mockito.kotlin)
@@ -63,12 +65,12 @@ dependencies {
     testImplementation(libs.google.truth)
     testImplementation(libs.coroutines.test)
     testImplementation(libs.turbine)
+    testImplementation(libs.mockk)
 
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(libs.google.truth)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.ui.test.junit4)
-    debugImplementation(libs.androidx.ui.tooling)
-    debugImplementation(libs.androidx.ui.test.manifest)
+    androidTestImplementation(libs.mockk.android) // Use the -android artifact
 }

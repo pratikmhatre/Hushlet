@@ -26,13 +26,13 @@ interface CardsDao {
     @Query("DELETE FROM ${AppConstants.CARD_TABLE}")
     suspend fun deleteAllCards()
 
-    @Query("SELECT id, cardNumber, cardName, cardType, cardHolderName,isFavourite, updatedAt FROM ${AppConstants.CARD_TABLE} WHERE isArchived = 0 AND isFavourite = 1 ORDER BY updatedAt DESC")
+    @Query("SELECT id, cardNumber, cardName, cardType, cardHolderName,isFavourite, isArchived, updatedAt FROM ${AppConstants.CARD_TABLE} WHERE isArchived = 0 AND isFavourite = 1 ORDER BY updatedAt DESC")
     suspend fun getFavouriteCardsList(): List<CardListItemDto>
 
-    @Query("SELECT id, cardNumber, cardName, cardType, cardHolderName,isFavourite, updatedAt FROM ${AppConstants.CARD_TABLE} WHERE isArchived = 0 ORDER BY cardName ASC")
+    @Query("SELECT id, cardNumber, cardName, cardType, cardHolderName,isFavourite, isArchived, updatedAt FROM ${AppConstants.CARD_TABLE} WHERE isArchived = 0 ORDER BY cardName ASC")
     suspend fun getActiveCardsList(): List<CardListItemDto>
 
-    @Query("SELECT id, cardNumber, cardName, cardType, cardHolderName,isFavourite, updatedAt FROM ${AppConstants.CARD_TABLE} WHERE isArchived = 1 ORDER BY cardName ASC")
+    @Query("SELECT id, cardNumber, cardName, cardType, cardHolderName,isFavourite,isArchived, updatedAt FROM ${AppConstants.CARD_TABLE} WHERE isArchived = 1 ORDER BY cardName ASC")
     suspend fun getArchivedCardsList(): List<CardListItemDto>
 
     @Query("SELECT * FROM ${AppConstants.CARD_TABLE} WHERE id is :pk")
@@ -40,7 +40,7 @@ interface CardsDao {
 
     @Query(
         """
-    SELECT id, cardNumber, cardName, cardType, cardHolderName, isFavourite, updatedAt 
+    SELECT id, cardNumber, cardName, cardType, cardHolderName, isFavourite,isArchived, updatedAt 
     FROM ${AppConstants.CARD_TABLE}
     WHERE (
         cardName COLLATE NOCASE LIKE '%' || :query || '%' OR 
@@ -55,7 +55,7 @@ interface CardsDao {
 
     @Query(
         """
-    SELECT id, cardNumber, cardName, cardType, cardHolderName, isFavourite, updatedAt 
+    SELECT id, cardNumber, cardName, cardType, cardHolderName, isFavourite, isArchived, updatedAt 
     FROM ${AppConstants.CARD_TABLE}
     WHERE (
         cardName COLLATE NOCASE LIKE '%' || :query || '%' OR 
@@ -68,7 +68,7 @@ interface CardsDao {
     )
     suspend fun searchArchivedCards(query: String): List<CardListItemDto>
 
-    @Query("SELECT id, cardNumber, cardName, cardType, cardHolderName,isFavourite, updatedAt FROM ${AppConstants.CARD_TABLE} WHERE isArchived = 0 ORDER BY updatedAt DESC LIMIT :limit")
+    @Query("SELECT id, cardNumber, cardName, cardType, cardHolderName,isFavourite, isArchived, updatedAt FROM ${AppConstants.CARD_TABLE} WHERE isArchived = 0 ORDER BY createdAt DESC LIMIT :limit")
     suspend fun getRecentlyAddedCards(limit: Int): List<CardListItemDto>
 
 }

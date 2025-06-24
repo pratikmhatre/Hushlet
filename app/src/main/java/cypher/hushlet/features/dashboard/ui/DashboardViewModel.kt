@@ -1,7 +1,10 @@
 package cypher.hushlet.features.dashboard.ui
 
+import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import cypher.hushlet.R
+import cypher.hushlet.features.dashboard.domain.models.DashboardContent
 import cypher.hushlet.features.dashboard.domain.usecases.GetAccountDetails
 import cypher.hushlet.features.dashboard.domain.usecases.GetCardDetails
 import cypher.hushlet.features.dashboard.domain.usecases.GetDashboardData
@@ -32,9 +35,9 @@ class DashboardViewModel constructor(
         viewModelScope.launch {
             _dashboardUiState.value = DashboardUiState.Loading
             val dashboardData = getDashboardData.invoke()
-            if (dashboardData.isCardsAvailable || dashboardData.isAccountsAvailable) {
-                _dashboardUiState.value = DashboardUiState.Success(dashboardData)
+            if (dashboardData.cardSectionContent !is DashboardContent.NoContent || dashboardData.accountSectionContent !is DashboardContent.NoContent) {
                 _dashboardUiEvents.emit(DashboardUiEvents.HideEmptyState)
+                _dashboardUiState.emit(DashboardUiState.DashboardDataState(dashboardData))
             } else {
                 _dashboardUiEvents.emit(DashboardUiEvents.ShowEmptyState)
             }

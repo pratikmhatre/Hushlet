@@ -8,6 +8,8 @@ espressoCore = "3.6.1"
 lifecycleRuntimeKtx = "2.9.0"
 activityCompose = "1.10.1"
 composeBom = "2025.05.01"
+mockk = "1.13.10"
+mockkAndroid = "1.13.10"
 navigationVersion = "2.9.0"
 roomVersion = "2.7.1"
 kspVersion = "2.1.10-1.0.30"
@@ -38,6 +40,8 @@ androidx-material3 = { group = "androidx.compose.material3", name = "material3" 
 
 androidx-room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "roomVersion" }
 androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "roomVersion" }
+mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
+mockk-android = { module = "io.mockk:mockk-android", version.ref = "mockkAndroid" }
 room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "roomVersion" }
 
 mockito-core = { group = "org.mockito", name = "mockito-core", version.ref = "mockito-core" }

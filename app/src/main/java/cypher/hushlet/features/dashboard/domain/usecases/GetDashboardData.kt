@@ -1,8 +1,11 @@
 package cypher.hushlet.features.dashboard.domain.usecases
 
+import cypher.hushlet.core.domain.models.AccountListItemDto
+import cypher.hushlet.core.domain.models.CardListItemDto
 import cypher.hushlet.core.utils.AppConstants
 import cypher.hushlet.core.domain.repositories.AccountsRepository
 import cypher.hushlet.core.domain.repositories.CardsRepository
+import cypher.hushlet.features.dashboard.domain.models.DashboardContent
 import cypher.hushlet.features.dashboard.domain.models.DashboardData
 
 class GetDashboardData constructor(
@@ -10,21 +13,32 @@ class GetDashboardData constructor(
 ) {
     suspend fun invoke(): DashboardData {
         val favoriteCards = cardsRepository.getFavouriteActiveCards()
-        val cardsToDisplay = favoriteCards.ifEmpty {
-            cardsRepository.getRecentlyAddedCards(AppConstants.RECENTLY_ADDED_ITEMS_COUNT)
+        val cardSectionContent = if (favoriteCards.isNotEmpty()) {
+            DashboardContent.FavoriteContent(favoriteCards)
+        } else {
+            val recentCards =
+                cardsRepository.getRecentlyAddedCards(AppConstants.RECENTLY_ADDED_ITEMS_COUNT)
+            if (recentCards.isNotEmpty()) {
+                DashboardContent.RecentContent(recentCards)
+            } else {
+                DashboardContent.NoContent()
+            }
         }
+
 
         val favoriteAccounts = accountsRepository.getFavouriteAccounts()
-        val accountsToDisplay = favoriteAccounts.ifEmpty {
-            accountsRepository.getRecentlyAddedAccounts(AppConstants.RECENTLY_ADDED_ITEMS_COUNT)
+        val accountSectionContent = if (favoriteAccounts.isNotEmpty()) {
+            DashboardContent.FavoriteContent(favoriteAccounts)
+        } else {
+            val recentAccounts =
+                accountsRepository.getRecentlyAddedAccounts(AppConstants.RECENTLY_ADDED_ITEMS_COUNT)
+            if (recentAccounts.isNotEmpty()) {
+                DashboardContent.RecentContent(recentAccounts)
+            } else {
+                DashboardContent.NoContent()
+            }
         }
 
-        return DashboardData(
-            isCardsAvailable = cardsToDisplay.isNotEmpty(),
-            isFavoriteCardsAvailable = favoriteCards.isNotEmpty(),
-            cardsList = cardsToDisplay,
-            isFavoriteAccountsAvailable = favoriteAccounts.isNotEmpty(),
-            accountsList = accountsToDisplay, isAccountsAvailable = accountsToDisplay.isNotEmpty()
-        )
+        return DashboardData(cardSectionContent, accountSectionContent)
     }
 }
