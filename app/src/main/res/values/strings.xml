@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">Hushlet</string>
+
+    <string name="error_username_empty">Username cannot be empty</string>
+    <string name="error_password_empty">Password cannot be empty</string>
+    <string name="error_account_name_empty">Account name cannot be empty</string>
+    <string name="error_account_name_taken">Account name already exist</string>
+    <string name="error_card_number_empty">Card number cannot be empty</string>
+
+    <string name="warning_username_short">Username is too short</string>
+    <string name="warning_password_short">Password is too short</string>
 </resources>
