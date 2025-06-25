@@ -1,4 +1,4 @@
-package cypher.hushlet.features.dashboard.domain.usecases
+package cypher.hushlet.core.domain.usecases
 
 import cypher.hushlet.core.domain.models.CardDto
 import cypher.hushlet.core.domain.repositories.CardsRepository

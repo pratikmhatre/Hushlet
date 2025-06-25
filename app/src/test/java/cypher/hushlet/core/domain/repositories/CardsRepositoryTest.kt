@@ -2,6 +2,8 @@ package cypher.hushlet.core.domain.repositories
 
 import com.google.common.truth.Truth.assertThat
 import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.times
+import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import cypher.hushlet.core.data.datasources.local.db.cards.CardsDao
 import cypher.hushlet.core.data.repositories.CardsRepositoryImpl
@@ -13,6 +15,9 @@ import org.junit.Before
 import org.junit.Test
 
 class CardsRepositoryTest {
+    private val cardDtoList = getCardDtoList()
+    private val crudCardDto = cardDtoList.first()
+    private val expectedCardId = 1
     private val cardsDao = mock<CardsDao>()
     private lateinit var cardsRepository: CardsRepository
     private val favouriteCards = getCardsList().filter { it.isFavourite }
@@ -37,19 +42,6 @@ class CardsRepositoryTest {
             cardsRepository = CardsRepositoryImpl(cardsDao)
         }
     }
-
-
-    private suspend fun mockFailedUpdateCardState() {
-        whenever(cardsDao.updateCard(crudCardDto.toEntity())).thenReturn(0)
-    }
-
-    private suspend fun mockFailedDeleteState() {
-        whenever(cardsDao.deleteCard(crudCardDto.toEntity())).thenReturn(0)
-    }
-
-    private val cardDtoList = getCardDtoList()
-    private val crudCardDto = cardDtoList.first()
-    private val expectedCardId = 1
 
     private suspend fun mockSuccessStates() {
         whenever(cardsDao.addMultipleCard(cardDtoList.map { it.toEntity() })).thenReturn(
@@ -312,6 +304,111 @@ class CardsRepositoryTest {
 
 
     @Test
+    fun `addCard function calls addCard of Dao`() {
+        runTest {
+            cardsRepository.addCard(crudCardDto)
+            verify(cardsDao, times(1)).addCard(crudCardDto.toEntity())
+        }
+    }
+
+    @Test
+    fun `addMultipleCards function calls addMultipleCard of Dao`() {
+        runTest {
+            cardsRepository.addMultipleCards(cardDtoList)
+            verify(cardsDao, times(1)).addMultipleCard(cardDtoList.map { it.toEntity() })
+        }
+    }
+
+    @Test
+    fun `updateCard function calls updateCard of Dao`() {
+        runTest {
+            cardsRepository.updateCard(crudCardDto)
+            verify(cardsDao, times(1)).updateCard(crudCardDto.toEntity())
+        }
+    }
+
+    @Test
+    fun `deleteCard function calls deleteCard of Dao`() {
+        runTest {
+            cardsRepository.deleteCard(crudCardDto)
+            verify(cardsDao, times(1)).deleteCard(crudCardDto.toEntity())
+        }
+    }
+
+    @Test
+    fun `deleteAllCards function calls deleteAllCards of Dao`() {
+        runTest {
+            cardsRepository.deleteAllCards()
+            verify(cardsDao, times(1)).deleteAllCards()
+        }
+    }
+
+    @Test
+    fun `getFavouriteActiveCards function calls getFavouriteCardsList of Dao`() {
+        runTest {
+            cardsRepository.getFavouriteActiveCards()
+            verify(cardsDao, times(1)).getFavouriteCardsList()
+        }
+    }
+
+    @Test
+    fun `getAllActiveCards function calls getActiveCardsList of Dao`() {
+        runTest {
+            cardsRepository.getAllActiveCards()
+            verify(cardsDao, times(1)).getActiveCardsList()
+        }
+
+    }
+
+    @Test
+    fun `getArchivedCards function calls getArchivedCardsList of Dao`() {
+        runTest {
+            cardsRepository.getArchivedCards()
+            verify(cardsDao, times(1)).getArchivedCardsList()
+        }
+
+    }
+
+    @Test
+    fun `getSingleCard function calls getSingleCard of Dao`() {
+        runTest {
+            cardsRepository.getSingleCard(expectedCardId.toLong())
+            verify(cardsDao, times(1)).getSingleCard(expectedCardId.toLong())
+        }
+
+    }
+
+    @Test
+    fun `searchActiveCards function calls searchActiveCards of Dao`() {
+        runTest {
+            cardsRepository.searchActiveCards(searchQuery)
+            verify(cardsDao, times(1)).searchActiveCards(searchQuery)
+        }
+
+    }
+
+    @Test
+    fun `searchArchivedCards function calls searchArchivedCards of Dao`() {
+        runTest {
+            cardsRepository.searchArchivedCards(searchQuery)
+            verify(cardsDao, times(1)).searchArchivedCards(searchQuery)
+        }
+
+    }
+
+    @Test
+    fun `getRecentlyAddedCards function calls getRecentlyAddedCards of Dao`() {
+        runTest {
+            cardsRepository.getRecentlyAddedCards(AppConstants.RECENTLY_ADDED_ITEMS_COUNT)
+            verify(
+                cardsDao,
+                times(1)
+            ).getRecentlyAddedCards(AppConstants.RECENTLY_ADDED_ITEMS_COUNT)
+        }
+
+    }
+
+    @Test
     fun `test add card returns primary key of inserted card`() {
         runTest {
             val pk = cardsRepository.addCard(crudCardDto)
@@ -363,7 +460,6 @@ class CardsRepositoryTest {
 
     @Test
     fun `test delete all cards clears all saved cards`() {
-        //mock delete all cards, mock getall active and archived cards
         runTest {
             whenever(cardsRepository.deleteAllCards()).thenReturn(Unit)
             whenever(cardsRepository.getAllActiveCards()).thenReturn(listOf())

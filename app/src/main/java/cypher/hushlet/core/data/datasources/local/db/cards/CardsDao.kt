@@ -38,6 +38,9 @@ interface CardsDao {
     @Query("SELECT * FROM ${AppConstants.CARD_TABLE} WHERE id is :pk")
     suspend fun getSingleCard(pk: Long): CardEntity?
 
+    @Query("SELECT * FROM ${AppConstants.CARD_TABLE} WHERE cardName = :cardName COLLATE NOCASE LIMIT 1")
+    suspend fun getCardByCardName(cardName: String): CardEntity?
+
     @Query(
         """
     SELECT id, cardNumber, cardName, cardType, cardHolderName, isFavourite,isArchived, updatedAt 

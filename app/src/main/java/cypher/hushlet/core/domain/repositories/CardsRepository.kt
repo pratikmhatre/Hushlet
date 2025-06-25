@@ -5,6 +5,7 @@ import cypher.hushlet.core.domain.models.CardListItemDto
 
 interface CardsRepository {
     suspend fun addCard(card: CardDto): Long
+    suspend fun checkIfCardNameTaken(cardName: String): Boolean
     suspend fun addMultipleCards(cards: List<CardDto>): List<Long>
     suspend fun updateCard(card: CardDto): Int
     suspend fun deleteCard(card: CardDto) : Int

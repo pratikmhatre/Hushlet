@@ -28,4 +28,11 @@ data class AccountDto(
             updatedAt
         )
     }
+
+    fun toListItemDto(): AccountListItemDto {
+        return AccountListItemDto(
+            id = id,
+            accountName = title, url = url, isFavourite = isFavourite, updatedAt = updatedAt
+        )
+    }
 }

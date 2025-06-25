@@ -41,4 +41,7 @@ class AccountsRepositoryImpl constructor(private val accountsDao: AccountsDao) :
 
     override suspend fun getAccountDetails(id: Long): AccountDto? =
         accountsDao.getSingleAccount(id)?.toDto()
+
+    override suspend fun checkIfAccountNameTaken(accName: String): Boolean =
+        accountsDao.getAccountByAccountName(accName) != null
 }

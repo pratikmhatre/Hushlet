@@ -1,12 +1,10 @@
 package cypher.hushlet.features.dashboard.ui
 
-import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import cypher.hushlet.R
 import cypher.hushlet.features.dashboard.domain.models.DashboardContent
-import cypher.hushlet.features.dashboard.domain.usecases.GetAccountDetails
-import cypher.hushlet.features.dashboard.domain.usecases.GetCardDetails
+import cypher.hushlet.core.domain.usecases.GetAccountDetails
+import cypher.hushlet.core.domain.usecases.GetCardDetails
 import cypher.hushlet.features.dashboard.domain.usecases.GetDashboardData
 import cypher.hushlet.features.dashboard.ui.events.DashboardUiEvents
 import cypher.hushlet.features.dashboard.ui.events.DashboardUiState

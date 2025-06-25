@@ -36,4 +36,7 @@ class CardsRepositoryImpl constructor(
 
     override suspend fun getRecentlyAddedCards(count: Int): List<CardListItemDto> =
         cardsDao.getRecentlyAddedCards(count)
+
+    override suspend fun checkIfCardNameTaken(cardName: String): Boolean =
+        cardsDao.getCardByCardName(cardName) != null
 }

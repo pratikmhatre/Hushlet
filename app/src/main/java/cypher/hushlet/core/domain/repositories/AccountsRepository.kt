@@ -16,4 +16,5 @@ interface AccountsRepository {
     suspend fun searchActiveAccounts(query: String): List<AccountListItemDto>
     suspend fun searchArchivedAccounts(query: String): List<AccountListItemDto>
     suspend fun getRecentlyAddedAccounts(count: Int): List<AccountListItemDto>
+    suspend fun checkIfAccountNameTaken(accName: String): Boolean
 }

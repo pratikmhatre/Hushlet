@@ -375,6 +375,23 @@ class CardsDaoTest {
         }
     }
 
+    @Test
+    fun getCardByCardNameReturnsDataIfExists() {
+        runTest {
+            val cardToAdd = getActiveCards().first()
+            cardsDao.addCard(cardToAdd)
+            assertThat(cardsDao.getCardByCardName(cardToAdd.cardName)).isNotNull()
+        }
+    }
+
+    @Test
+    fun getCardByCardNameReturnsNullIfUnavailable() {
+        runTest {
+            val cardToAdd = getActiveCards().first()
+            assertThat(cardsDao.getCardByCardName(cardToAdd.cardName)).isNull()
+        }
+    }
+
 
     private fun getActiveCards(count: Int = 5): List<CardEntity> {
         val cardsList = arrayListOf(

@@ -67,7 +67,7 @@ class AccountDaoTest {
             val insertedAccount = accountsDao.getSingleAccount(id)
 
             assertThat(insertedAccount).isNotNull()
-            assertThat(insertedAccount!!.title).isEqualTo(accountData.title)
+            assertThat(insertedAccount!!.accountName).isEqualTo(accountData.accountName)
             assertThat(insertedAccount.username).isEqualTo(accountData.username)
             assertThat(insertedAccount.password).isEqualTo(accountData.password)
             assertThat(insertedAccount.url).isEqualTo(accountData.url)
@@ -103,7 +103,7 @@ class AccountDaoTest {
 
             val accountToUpdate = AccountEntity(
                 id = savedAccountData!!.id,
-                title = changedTitle,
+                accountName = changedTitle,
                 username = changedUsername,
                 password = savedAccountData.password,
                 url = savedAccountData.url,
@@ -119,7 +119,7 @@ class AccountDaoTest {
             val updatedAccountData = accountsDao.getSingleAccount(pk.toLong())
 
             assertThat(updatedAccountData).isNotNull()
-            assertThat(updatedAccountData!!.title).isEqualTo(changedTitle)
+            assertThat(updatedAccountData!!.accountName).isEqualTo(changedTitle)
             assertThat(updatedAccountData.username).isEqualTo(changedUsername)
         }
     }
@@ -200,12 +200,12 @@ class AccountDaoTest {
             val accountList = ArrayList(getActiveAccounts())
             accountsDao.addMultipleAccounts(accountList)
 
-            accountList.sortBy { it.title }
+            accountList.sortBy { it.accountName }
 
             val savedAccounts = accountsDao.getActiveAccountsList()
             accountList.forEachIndexed { index, entry ->
                 val savedAccount = savedAccounts[index]
-                assertThat(savedAccount.title).isEqualTo(entry.title)
+                assertThat(savedAccount.accountName).isEqualTo(entry.accountName)
                 assertThat(savedAccount.isFavourite).isEqualTo(entry.isFavourite)
                 assertThat(savedAccount.url).isEqualTo(entry.url)
             }
@@ -285,7 +285,7 @@ class AccountDaoTest {
             val savedAccountData = accountsDao.getSingleAccount(id)
 
             assertThat(savedAccountData).isNotNull()
-            assertThat(accountData.title).isEqualTo(savedAccountData!!.title)
+            assertThat(accountData.accountName).isEqualTo(savedAccountData!!.accountName)
             assertThat(accountData.username).isEqualTo(savedAccountData.username)
             assertThat(accountData.password).isEqualTo(savedAccountData.password)
             assertThat(accountData.url).isEqualTo(savedAccountData.url)
@@ -319,7 +319,7 @@ class AccountDaoTest {
             val results = accountsDao.searchActiveAccounts(searchQuery)
 
             assertThat(results.size).isEqualTo(accountsList.filter {
-                it.title.contains(
+                it.accountName.contains(
                     searchQuery,
                     ignoreCase = true
                 )
@@ -349,7 +349,7 @@ class AccountDaoTest {
             val results = accountsDao.searchArchivedAccounts(searchQuery)
 
             assertThat(results.size).isEqualTo(accountsList.filter {
-                it.title.contains(
+                it.accountName.contains(
                     searchQuery,
                     ignoreCase = true
                 )
@@ -375,7 +375,7 @@ class AccountDaoTest {
 
             favouriteAccounts.forEachIndexed { index, favrt ->
                 val savedFavouriteAccount = savedFavouriteAccounts[index]
-                assertThat(favrt.title).isEqualTo(savedFavouriteAccount.title)
+                assertThat(favrt.accountName).isEqualTo(savedFavouriteAccount.accountName)
                 assertThat(favrt.url).isEqualTo(savedFavouriteAccount.url)
             }
         }
@@ -385,7 +385,7 @@ class AccountDaoTest {
     private fun getActiveAccounts(count: Int = 6) = listOf(
         AccountEntity(
             id = 0,
-            title = "Gmail",
+            accountName = "Gmail",
             username = "john.doe@gmail.com",
             password = "GmailPass123!",
             url = "https://mail.google.com",
@@ -397,7 +397,7 @@ class AccountDaoTest {
         ),
         AccountEntity(
             id = 0,
-            title = "Facebook",
+            accountName = "Facebook",
             username = "john.doe.fb",
             password = "FbPass@2025",
             url = "https://facebook.com",
@@ -409,7 +409,7 @@ class AccountDaoTest {
         ),
         AccountEntity(
             id = 0,
-            title = "Twitter",
+            accountName = "Twitter",
             username = "johntweets",
             password = "Tw!t#567",
             url = "https://twitter.com",
@@ -421,7 +421,7 @@ class AccountDaoTest {
         ),
         AccountEntity(
             id = 0,
-            title = "Netflix",
+            accountName = "Netflix",
             username = "johnflix",
             password = "Netf!ix2025",
             url = "https://netflix.com",
@@ -433,7 +433,7 @@ class AccountDaoTest {
         ),
         AccountEntity(
             id = 0,
-            title = "Amazon",
+            accountName = "Amazon",
             username = "johnshopper",
             password = "Am@zon#2025",
             url = "https://amazon.com",
@@ -445,7 +445,7 @@ class AccountDaoTest {
         ),
         AccountEntity(
             id = 0,
-            title = "GitHub",
+            accountName = "GitHub",
             username = "johndev",
             password = "GH_token_234!",
             url = "https://github.com",
@@ -460,7 +460,7 @@ class AccountDaoTest {
     private fun getArchivedAccounts() = listOf(
         AccountEntity(
             id = 0,
-            title = "Reddit",
+            accountName = "Reddit",
             username = "john_reddit",
             password = "R3ddit@2025",
             url = "https://reddit.com",
@@ -472,7 +472,7 @@ class AccountDaoTest {
         ),
         AccountEntity(
             id = 0,
-            title = "Spotify",
+            accountName = "Spotify",
             username = "johnmusic",
             password = "Music#L0ver",
             url = "https://spotify.com",
@@ -484,7 +484,7 @@ class AccountDaoTest {
         ),
         AccountEntity(
             id = 0,
-            title = "Zoom",
+            accountName = "Zoom",
             username = "john.zoom",
             password = "Zoom@meet123",
             url = "https://zoom.us",
@@ -496,7 +496,7 @@ class AccountDaoTest {
         ),
         AccountEntity(
             id = 0,
-            title = "Bank App",
+            accountName = "Bank App",
             username = "john.bank",
             password = "B@nk#Secure789",
             url = "https://mybank.com",

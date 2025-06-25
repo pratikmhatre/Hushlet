@@ -9,7 +9,7 @@ import cypher.hushlet.core.utils.AppConstants
 data class AccountEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Long = 0L,
-    val title: String,
+    val accountName: String,
     val username: String?,
     val password: String,
     val url: String?,
@@ -22,7 +22,7 @@ data class AccountEntity(
     fun toDto(): AccountDto {
         return AccountDto(
             id,
-            title,
+            accountName,
             username,
             password,
             url,
