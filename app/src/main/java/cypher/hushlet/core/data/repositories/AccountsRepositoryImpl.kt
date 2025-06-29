@@ -4,8 +4,9 @@ import cypher.hushlet.core.data.datasources.local.db.accounts.AccountsDao
 import cypher.hushlet.core.domain.models.AccountDto
 import cypher.hushlet.core.domain.models.AccountListItemDto
 import cypher.hushlet.core.domain.repositories.AccountsRepository
+import javax.inject.Inject
 
-class AccountsRepositoryImpl constructor(private val accountsDao: AccountsDao) :
+class AccountsRepositoryImpl @Inject constructor(private val accountsDao: AccountsDao) :
     AccountsRepository {
     override suspend fun addAccount(account: AccountDto): Long =
         accountsDao.addAccount(account.toEntity())

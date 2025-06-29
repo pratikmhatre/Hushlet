@@ -4,8 +4,9 @@ import cypher.hushlet.core.data.datasources.local.db.cards.CardsDao
 import cypher.hushlet.core.domain.models.CardDto
 import cypher.hushlet.core.domain.models.CardListItemDto
 import cypher.hushlet.core.domain.repositories.CardsRepository
+import javax.inject.Inject
 
-class CardsRepositoryImpl constructor(
+class CardsRepositoryImpl @Inject constructor(
     private val cardsDao: CardsDao,
 ) : CardsRepository {
     override suspend fun addCard(card: CardDto): Long = cardsDao.addCard(card.toEntity())

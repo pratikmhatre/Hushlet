@@ -15,6 +15,7 @@ import cypher.hushlet.core.domain.usecases.UpdateCard
 import cypher.hushlet.features.add_credentials.domain.usecases.CheckIfAccountNameExists
 import cypher.hushlet.features.add_credentials.domain.usecases.CheckIfCardNameExists
 import cypher.hushlet.features.add_credentials.ui.states.ErrorState
+import cypher.hushlet.features.add_credentials.ui.states.UiState
 import cypher.hushlet.features.add_credentials.utils.DataValidator.validateAccountData
 import cypher.hushlet.features.add_credentials.utils.DataValidator.validateCardData
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -45,12 +46,18 @@ class AddEditCredentialsViewModel @Inject constructor(
     private var _errorState = MutableStateFlow<ErrorState>(ErrorState.NoErrors)
     val errorState = _errorState.asStateFlow()
 
+    private var _uiStateFlow = MutableStateFlow<UiState>(UiState.AddCardState)
+    val uiStateFlow = _uiStateFlow.asStateFlow()
+
     init {
         if (isEditJourney) {
             viewModelScope.launch {
                 if (isAccount) accountDto = getAccountDetails(cardDto!!.id) else cardDto =
                     getCardDetails(accountDto!!.id)
             }
+        } else {
+            _uiStateFlow.value =
+                if (isAccount) UiState.AddAccountState(generatedPassword = "") else UiState.AddCardState
         }
     }
 
@@ -125,4 +132,3 @@ class AddEditCredentialsViewModel @Inject constructor(
     }
 
 }
-
