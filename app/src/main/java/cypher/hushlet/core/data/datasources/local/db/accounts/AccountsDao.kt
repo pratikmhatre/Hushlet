@@ -8,6 +8,7 @@ import androidx.room.Query
 import androidx.room.Update
 import cypher.hushlet.core.domain.models.AccountListItemDto
 import cypher.hushlet.core.utils.AppConstants
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface AccountsDao {
@@ -27,7 +28,7 @@ interface AccountsDao {
     suspend fun deleteAllAccounts()
 
     @Query("SELECT id, accountName, url, isFavourite, updatedAt FROM ${AppConstants.ACCOUNT_TABLE} WHERE isArchived = 0 AND isFavourite = 1 ORDER BY updatedAt DESC")
-    suspend fun getFavouriteAccountsList(): List<AccountListItemDto>
+    fun getFavouriteAccountsList(): Flow<List<AccountListItemDto>>
 
     @Query("SELECT id, accountName, url, isFavourite, updatedAt FROM ${AppConstants.ACCOUNT_TABLE} WHERE isArchived = 0 ORDER BY accountName ASC")
     suspend fun getActiveAccountsList(): List<AccountListItemDto>
@@ -72,6 +73,6 @@ interface AccountsDao {
     suspend fun searchArchivedAccounts(query: String): List<AccountListItemDto>
 
     @Query("SELECT id, accountName, url, isFavourite, updatedAt FROM ${AppConstants.ACCOUNT_TABLE} WHERE isArchived = 0 ORDER BY createdAt DESC LIMIT :count")
-    suspend fun getRecentlyAddedAccounts(count: Int): List<AccountListItemDto>
+    fun getRecentlyAddedAccounts(count: Int): Flow<List<AccountListItemDto>>
 
 }

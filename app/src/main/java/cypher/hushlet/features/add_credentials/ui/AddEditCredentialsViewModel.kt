@@ -1,5 +1,6 @@
 package cypher.hushlet.features.add_credentials.ui
 
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cypher.hushlet.core.domain.models.AccountDto
@@ -14,10 +15,13 @@ import cypher.hushlet.core.domain.usecases.UpdateAccount
 import cypher.hushlet.core.domain.usecases.UpdateCard
 import cypher.hushlet.features.add_credentials.domain.usecases.CheckIfAccountNameExists
 import cypher.hushlet.features.add_credentials.domain.usecases.CheckIfCardNameExists
-import cypher.hushlet.features.add_credentials.ui.states.ErrorState
+import cypher.hushlet.features.add_credentials.ui.models.FormFieldState
 import cypher.hushlet.features.add_credentials.ui.states.UiState
-import cypher.hushlet.features.add_credentials.utils.DataValidator.validateAccountData
-import cypher.hushlet.features.add_credentials.utils.DataValidator.validateCardData
+import cypher.hushlet.features.add_credentials.utils.DataValidator.validateAccountName
+import cypher.hushlet.features.add_credentials.utils.DataValidator.validateCardName
+import cypher.hushlet.features.add_credentials.utils.DataValidator.validateCardNumber
+import cypher.hushlet.features.add_credentials.utils.DataValidator.validatePassword
+import cypher.hushlet.features.add_credentials.utils.DataValidator.validateUserName
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -43,11 +47,89 @@ class AddEditCredentialsViewModel @Inject constructor(
     private var cardDto: CardDto? = null
     private var accountDto: AccountDto? = null
 
-    private var _errorState = MutableStateFlow<ErrorState>(ErrorState.NoErrors)
-    val errorState = _errorState.asStateFlow()
-
     private var _uiStateFlow = MutableStateFlow<UiState>(UiState.AddCardState)
     val uiStateFlow = _uiStateFlow.asStateFlow()
+
+    var accountNameState = mutableStateOf(FormFieldState())
+        private set
+
+    var userNameState = mutableStateOf(FormFieldState())
+        private set
+
+    var passwordState = mutableStateOf(FormFieldState())
+        private set
+
+    var urlState = mutableStateOf(FormFieldState())
+        private set
+
+    var notesState = mutableStateOf(FormFieldState())
+        private set
+
+    var favouriteState = mutableStateOf(false)
+        private set
+
+    var cardNameState = mutableStateOf(FormFieldState())
+        private set
+    var cardNumberState = mutableStateOf(FormFieldState())
+        private set
+    var cardHolderNameState = mutableStateOf(FormFieldState())
+        private set
+    var expMonthState = mutableStateOf(FormFieldState())
+        private set
+    var expYearState = mutableStateOf(FormFieldState())
+        private set
+    var secCodeState = mutableStateOf(FormFieldState())
+        private set
+
+
+    fun onAccountNameChanged(value: String) {
+        accountNameState.value = accountNameState.value.copy(value = value)
+    }
+
+    fun onUserNameChanged(value: String) {
+        userNameState.value = userNameState.value.copy(value = value)
+    }
+
+    fun onPasswordChanged(value: String) {
+        passwordState.value = passwordState.value.copy(value = value)
+    }
+
+    fun onUrlChanged(value: String) {
+        urlState.value = urlState.value.copy(value = value)
+    }
+
+    fun onNotesChanged(value: String) {
+        notesState.value = notesState.value.copy(value = value)
+    }
+
+    fun onCardNameChanged(value: String) {
+        cardNameState.value = cardNameState.value.copy(value = value)
+    }
+
+    fun onCardNumberChanged(value: String) {
+        cardNumberState.value = cardNumberState.value.copy(value = value)
+    }
+
+    fun onCardHolderNameChanged(value: String) {
+        cardHolderNameState.value = cardHolderNameState.value.copy(value = value)
+    }
+
+    fun onExpMonthChanged(value: String) {
+        expMonthState.value = expMonthState.value.copy(value = value)
+    }
+
+    fun onExpYearChanged(value: String) {
+        expYearState.value = expYearState.value.copy(value = value)
+    }
+
+    fun onSecCodeChanged(value: String) {
+        secCodeState.value = secCodeState.value.copy(value = value)
+    }
+
+    fun onFavouriteChanged(value: Boolean) {
+        favouriteState.value = value
+    }
+
 
     init {
         if (isEditJourney) {
@@ -57,7 +139,7 @@ class AddEditCredentialsViewModel @Inject constructor(
             }
         } else {
             _uiStateFlow.value =
-                if (isAccount) UiState.AddAccountState(generatedPassword = "") else UiState.AddCardState
+                if (isAccount) UiState.AddAccountState else UiState.AddCardState
         }
     }
 
@@ -67,33 +149,79 @@ class AddEditCredentialsViewModel @Inject constructor(
         }
     }
 
-    fun saveAccountData(
-        title: String, userName: String, password: String, isFavourite: Boolean, url: String?, notes: String = ""
-    ) {
-        viewModelScope.launch {
-            val dataValidation = validateAccountData(title, userName, password, checkIfAccountNameExists)
-            if (dataValidation.first) {
-                _errorState.value = dataValidation.second
-                return@launch
-            }
+    suspend fun validateAccountData(
+        title: String, userName: String, password: String, checkAccountNameExists: CheckIfAccountNameExists
+    ): Boolean {
 
-            val account = AccountDto(
-                id = 0,
-                title = title,
-                username = userName,
-                password = password,
-                isFavourite = isFavourite,
-                isArchived = false,
-                createdAt = System.currentTimeMillis(),
-                updatedAt = System.currentTimeMillis(),
-                url = url,
-                notes = notes
+        accountNameState.value =
+            accountNameState.value.copy(errorData = validateAccountName(title, checkAccountNameExists))
+        userNameState.value = userNameState.value.copy(errorData = validateUserName(userName))
+        passwordState.value = passwordState.value.copy(errorData = validatePassword(password))
+
+        return accountNameState.value.errorData.hasError || userNameState.value.errorData.hasError || passwordState.value.errorData.hasError
+    }
+
+    suspend fun validateCardData(
+        cardName: String, cardNumber: String, checkAccountNameExists: CheckIfCardNameExists
+    ): Boolean {
+        cardNameState.value = cardNameState.value.copy(errorData = validateCardName(cardName, checkAccountNameExists))
+        cardHolderNameState.value = cardHolderNameState.value.copy(errorData = validateCardNumber(cardNumber))
+        return cardNameState.value.hasError || cardHolderNameState.value.hasError
+    }
+
+
+    fun onAccountSubmit() {
+        viewModelScope.launch {
+            saveAccountData(
+                title = accountNameState.value.value,
+                userName = userNameState.value.value,
+                password = passwordState.value.value,
+                isFavourite = favouriteState.value,
+                url = urlState.value.value,
+                notes = notesState.value.value
             )
-            if (isEditJourney) updateAccount(account) else saveNewAccount(account)
         }
     }
 
-    fun saveCardData(
+    fun onCardSubmit() {
+        viewModelScope.launch {
+            saveCardData(
+                cardName = cardNameState.value.value,
+                cardNumber = cardNumberState.value.value,
+                expiryMonth = expMonthState.value.value,
+                expiryYear = expYearState.value.value,
+                securityCode = secCodeState.value.value.toIntOrNull(),
+                cardType = null,
+                cardHolderName = cardHolderNameState.value.value,
+                notes = notesState.value.value,
+                isFavourite = favouriteState.value
+            )
+        }
+    }
+
+    private suspend fun saveAccountData(
+        title: String, userName: String, password: String, isFavourite: Boolean, url: String?, notes: String = ""
+    ) {
+        val isDataInValid = validateAccountData(title, userName, password, checkIfAccountNameExists)
+        if (isDataInValid) return
+
+        val account = AccountDto(
+            id = 0,
+            title = title,
+            username = userName,
+            password = password,
+            isFavourite = isFavourite,
+            isArchived = false,
+            createdAt = System.currentTimeMillis(),
+            updatedAt = System.currentTimeMillis(),
+            url = url,
+            notes = notes
+        )
+        if (isEditJourney) updateAccount(account) else saveNewAccount(account)
+
+    }
+
+    private suspend fun saveCardData(
         cardName: String,
         cardNumber: String,
         expiryMonth: String?,
@@ -104,31 +232,25 @@ class AddEditCredentialsViewModel @Inject constructor(
         notes: String,
         isFavourite: Boolean
     ) {
-        viewModelScope.launch {
+        val isCardDataValid = validateCardData(cardName, cardNumber, checkIfCardNameExists)
+        if (isCardDataValid.not()) return
 
-            val dataValidation = validateCardData(cardName, cardNumber, checkIfCardNameExists)
-            if (dataValidation.first) {
-                _errorState.value = dataValidation.second
-                return@launch
-            }
-
-            val cardDto = CardDto(
-                id = 0,
-                cardName = cardName,
-                cardNumber = cardNumber,
-                cardHolderName = cardHolderName,
-                expiryMonth = expiryMonth,
-                expiryYear = expiryYear,
-                securityCode = securityCode,
-                cardType = cardType,
-                notes = notes,
-                isFavourite = isFavourite,
-                isArchived = false,
-                createdAt = System.currentTimeMillis(),
-                updatedAt = System.currentTimeMillis()
-            )
-            if (isEditJourney) updateCard(cardDto) else saveNewCard(cardDto)
-        }
+        val cardDto = CardDto(
+            id = 0,
+            cardName = cardName,
+            cardNumber = cardNumber,
+            cardHolderName = cardHolderName,
+            expiryMonth = expiryMonth,
+            expiryYear = expiryYear,
+            securityCode = securityCode,
+            cardType = cardType,
+            notes = notes,
+            isFavourite = isFavourite,
+            isArchived = false,
+            createdAt = System.currentTimeMillis(),
+            updatedAt = System.currentTimeMillis()
+        )
+        if (isEditJourney) updateCard(cardDto) else saveNewCard(cardDto)
     }
 
 }

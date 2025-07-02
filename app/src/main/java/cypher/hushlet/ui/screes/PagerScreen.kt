@@ -16,6 +16,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import cypher.hushlet.features.add_credentials.ui.AddEditCredentialScreen
+import cypher.hushlet.features.dashboard.ui.DashboardScreen
 
 @Composable
 fun PagerScreen() {
@@ -46,7 +48,7 @@ fun PagerNavHost(modifier: Modifier = Modifier, navController: NavHostController
             DashboardScreen()
         }
         composable(route = Settings.route) {
-            SettingsScreen()
+            AddEditCredentialScreen()
         }
     }
 }

@@ -16,11 +16,13 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import cypher.hushlet.ui.screes.AddNewCredential
-import cypher.hushlet.ui.screes.AddNewCredentialScreen
+import cypher.hushlet.features.add_credentials.ui.AddEditCredentialScreen
 import cypher.hushlet.ui.screes.Pager
 import cypher.hushlet.ui.screes.PagerScreen
 import cypher.hushlet.core.theme.HushletTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,7 +57,7 @@ fun HushletNavHost(modifier: Modifier = Modifier, navHostController: NavHostCont
         startDestination = Pager.route
     ) {
         composable(route = Pager.route) { PagerScreen() }
-        composable(route = AddNewCredential.route) { AddNewCredentialScreen() }
+        composable(route = AddNewCredential.route) { AddEditCredentialScreen() }
     }
 }
 

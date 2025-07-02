@@ -4,7 +4,7 @@ import cypher.hushlet.core.domain.models.AccountDto
 import cypher.hushlet.core.domain.models.CardDto
 
 sealed class UiState {
-    class AddAccountState(val generatedPassword: String) : UiState()
+    object AddAccountState : UiState()
     object AddCardState : UiState()
     class EditAccountState(val account: AccountDto) : UiState()
     class EditCardState(val card: CardDto) : UiState()

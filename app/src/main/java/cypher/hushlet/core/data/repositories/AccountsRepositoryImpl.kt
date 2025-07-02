@@ -4,6 +4,7 @@ import cypher.hushlet.core.data.datasources.local.db.accounts.AccountsDao
 import cypher.hushlet.core.domain.models.AccountDto
 import cypher.hushlet.core.domain.models.AccountListItemDto
 import cypher.hushlet.core.domain.repositories.AccountsRepository
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class AccountsRepositoryImpl @Inject constructor(private val accountsDao: AccountsDao) :
@@ -22,7 +23,7 @@ class AccountsRepositoryImpl @Inject constructor(private val accountsDao: Accoun
 
     override suspend fun deleteAllAccounts() = accountsDao.deleteAllAccounts()
 
-    override suspend fun getFavouriteAccounts(): List<AccountListItemDto> =
+    override suspend fun getFavouriteAccounts(): Flow<List<AccountListItemDto>> =
         accountsDao.getFavouriteAccountsList()
 
     override suspend fun getAllActiveAccounts(): List<AccountListItemDto> =
@@ -37,7 +38,7 @@ class AccountsRepositoryImpl @Inject constructor(private val accountsDao: Accoun
     override suspend fun searchArchivedAccounts(query: String): List<AccountListItemDto> =
         accountsDao.searchArchivedAccounts(query)
 
-    override suspend fun getRecentlyAddedAccounts(count: Int): List<AccountListItemDto> =
+    override suspend fun getRecentlyAddedAccounts(count: Int): Flow<List<AccountListItemDto>> =
         accountsDao.getRecentlyAddedAccounts(count)
 
     override suspend fun getAccountDetails(id: Long): AccountDto? =

@@ -8,6 +8,7 @@ import androidx.room.Query
 import androidx.room.Update
 import cypher.hushlet.core.domain.models.CardListItemDto
 import cypher.hushlet.core.utils.AppConstants
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface CardsDao {
@@ -27,7 +28,7 @@ interface CardsDao {
     suspend fun deleteAllCards()
 
     @Query("SELECT id, cardNumber, cardName, cardType, cardHolderName,isFavourite, isArchived, updatedAt FROM ${AppConstants.CARD_TABLE} WHERE isArchived = 0 AND isFavourite = 1 ORDER BY updatedAt DESC")
-    suspend fun getFavouriteCardsList(): List<CardListItemDto>
+    fun getFavouriteCardsList(): Flow<List<CardListItemDto>>
 
     @Query("SELECT id, cardNumber, cardName, cardType, cardHolderName,isFavourite, isArchived, updatedAt FROM ${AppConstants.CARD_TABLE} WHERE isArchived = 0 ORDER BY cardName ASC")
     suspend fun getActiveCardsList(): List<CardListItemDto>
@@ -72,6 +73,6 @@ interface CardsDao {
     suspend fun searchArchivedCards(query: String): List<CardListItemDto>
 
     @Query("SELECT id, cardNumber, cardName, cardType, cardHolderName,isFavourite, isArchived, updatedAt FROM ${AppConstants.CARD_TABLE} WHERE isArchived = 0 ORDER BY createdAt DESC LIMIT :limit")
-    suspend fun getRecentlyAddedCards(limit: Int): List<CardListItemDto>
+    fun getRecentlyAddedCards(limit: Int): Flow<List<CardListItemDto>>
 
 }

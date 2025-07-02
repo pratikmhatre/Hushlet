@@ -1,5 +1,6 @@
 package cypher.hushlet.core.domain.repositories
 
+import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.times
@@ -10,6 +11,7 @@ import cypher.hushlet.core.data.repositories.CardsRepositoryImpl
 import cypher.hushlet.core.domain.models.CardDto
 import cypher.hushlet.core.domain.models.CardListItemDto
 import cypher.hushlet.core.utils.AppConstants
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
@@ -51,14 +53,14 @@ class CardsRepositoryTest {
         whenever(cardsDao.updateCard(crudCardDto.toEntity())).thenReturn(expectedCardId)
         whenever(cardsDao.deleteCard(crudCardDto.toEntity())).thenReturn(expectedCardId)
         whenever(cardsDao.deleteAllCards()).thenReturn(Unit)
-        whenever(cardsDao.getFavouriteCardsList()).thenReturn(favouriteCards)
+        whenever(cardsDao.getFavouriteCardsList()).thenReturn(flowOf(favouriteCards))
         whenever(cardsDao.getActiveCardsList()).thenReturn(getCardsList().filter { it.isArchived.not() })
         whenever(cardsDao.getArchivedCardsList()).thenReturn(archivedCards)
         whenever(cardsDao.getSingleCard(expectedCardId.toLong())).thenReturn(crudCardDto.toEntity())
         whenever(cardsDao.searchActiveCards(searchQuery)).thenReturn(activeSearchResults)
         whenever(cardsDao.searchArchivedCards(searchQuery)).thenReturn(archivedSearchResults)
         whenever(cardsDao.getRecentlyAddedCards(AppConstants.RECENTLY_ADDED_ITEMS_COUNT)).thenReturn(
-            recentlyAddedCards
+            flowOf(recentlyAddedCards)
         )
     }
 
@@ -475,17 +477,23 @@ class CardsRepositoryTest {
     @Test
     fun `test get favourite active cards returns list of favourite cards`() {
         runTest {
-            val favrts = cardsRepository.getFavouriteActiveCards()
-            assertThat(favrts.size).isEqualTo(favouriteCards.size)
+            cardsRepository.getFavouriteActiveCards().test {
+                val favrts = awaitItem()
+                assertThat(favrts.size).isEqualTo(favouriteCards.size)
+                cancelAndIgnoreRemainingEvents()
+            }
         }
     }
 
     @Test
     fun `test get favourite active cards returns empty list if favourite cards found`() {
         runTest {
-            whenever(cardsRepository.getFavouriteActiveCards()).thenReturn(emptyList())
-            val favrts = cardsRepository.getFavouriteActiveCards()
-            assertThat(favrts).isEmpty()
+            whenever(cardsRepository.getFavouriteActiveCards()).thenReturn(flowOf(emptyList()))
+            cardsRepository.getFavouriteActiveCards().test {
+                val favrts = awaitItem()
+                assertThat(favrts).isEmpty()
+                cancelAndIgnoreRemainingEvents()
+            }
         }
     }
 
@@ -582,12 +590,14 @@ class CardsRepositoryTest {
     @Test
     fun `test recently added cards return list of active cards in descending order of their created time`() {
         runTest {
-            val recentCards =
-                cardsRepository.getRecentlyAddedCards(AppConstants.RECENTLY_ADDED_ITEMS_COUNT)
-            assertThat(recentCards.size).isEqualTo(recentlyAddedCards.size)
-            recentCards.forEachIndexed { index, result ->
-                assertThat(result.cardName).isEqualTo(recentlyAddedCards[index].cardName)
-                assertThat(result.cardNumber).isEqualTo(recentlyAddedCards[index].cardNumber)
+            cardsRepository.getRecentlyAddedCards(AppConstants.RECENTLY_ADDED_ITEMS_COUNT).test {
+                val recentCards = awaitItem()
+                assertThat(recentCards.size).isEqualTo(recentlyAddedCards.size)
+                recentCards.forEachIndexed { index, result ->
+                    assertThat(result.cardName).isEqualTo(recentlyAddedCards[index].cardName)
+                    assertThat(result.cardNumber).isEqualTo(recentlyAddedCards[index].cardNumber)
+                }
+                cancelAndIgnoreRemainingEvents()
             }
         }
     }
@@ -596,11 +606,13 @@ class CardsRepositoryTest {
     fun `test recently added cards return empty list if no active cards are available`() {
         runTest {
             whenever(cardsDao.getRecentlyAddedCards(AppConstants.RECENTLY_ADDED_ITEMS_COUNT)).thenReturn(
-                emptyList()
+                flowOf(emptyList())
             )
-            val recentCards =
-                cardsRepository.getRecentlyAddedCards(AppConstants.RECENTLY_ADDED_ITEMS_COUNT)
-            assertThat(recentCards).isEmpty()
+            cardsRepository.getRecentlyAddedCards(AppConstants.RECENTLY_ADDED_ITEMS_COUNT).test {
+                val recentCards = awaitItem()
+                assertThat(recentCards).isEmpty()
+                cancelAndIgnoreRemainingEvents()
+            }
         }
     }
 

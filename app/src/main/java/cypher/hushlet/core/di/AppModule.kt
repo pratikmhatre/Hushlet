@@ -2,7 +2,6 @@ package cypher.hushlet.core.di
 
 import android.content.Context
 import androidx.room.Room
-import androidx.room.RoomDatabase
 import cypher.hushlet.core.data.datasources.local.db.HushletDb
 import cypher.hushlet.core.data.datasources.local.db.accounts.AccountsDao
 import cypher.hushlet.core.data.datasources.local.db.cards.CardsDao
@@ -16,7 +15,6 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import javax.inject.Inject
 import javax.inject.Singleton
 
 @Module

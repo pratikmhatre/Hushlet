@@ -4,6 +4,7 @@ import cypher.hushlet.core.data.datasources.local.db.cards.CardsDao
 import cypher.hushlet.core.domain.models.CardDto
 import cypher.hushlet.core.domain.models.CardListItemDto
 import cypher.hushlet.core.domain.repositories.CardsRepository
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class CardsRepositoryImpl @Inject constructor(
@@ -20,7 +21,7 @@ class CardsRepositoryImpl @Inject constructor(
 
     override suspend fun deleteAllCards() = cardsDao.deleteAllCards()
 
-    override suspend fun getFavouriteActiveCards(): List<CardListItemDto> =
+    override suspend fun getFavouriteActiveCards(): Flow<List<CardListItemDto>> =
         cardsDao.getFavouriteCardsList()
 
     override suspend fun getAllActiveCards(): List<CardListItemDto> = cardsDao.getActiveCardsList()
@@ -35,7 +36,7 @@ class CardsRepositoryImpl @Inject constructor(
     override suspend fun searchArchivedCards(query: String): List<CardListItemDto> =
         cardsDao.searchArchivedCards(query)
 
-    override suspend fun getRecentlyAddedCards(count: Int): List<CardListItemDto> =
+    override suspend fun getRecentlyAddedCards(count: Int): Flow<List<CardListItemDto>> =
         cardsDao.getRecentlyAddedCards(count)
 
     override suspend fun checkIfCardNameTaken(cardName: String): Boolean =

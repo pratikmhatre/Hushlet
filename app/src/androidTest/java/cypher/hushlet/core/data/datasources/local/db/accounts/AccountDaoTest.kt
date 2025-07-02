@@ -4,6 +4,7 @@ import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.SmallTest
+import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import cypher.hushlet.core.data.datasources.local.db.HushletDb
 import junit.framework.TestCase.assertTrue
@@ -152,7 +153,7 @@ class AccountDaoTest {
 
             accountsDao.deleteAccount(accToDelete!!)
 
-            val id = accountsDao.getSingleAccount(accToDelete.id!!)
+            val id = accountsDao.getSingleAccount(accToDelete.id)
             assertThat(id).isNull()
         }
     }
@@ -367,17 +368,19 @@ class AccountDaoTest {
             val favouriteAccounts = activeAccounts.filter { it.isFavourite }.toMutableList()
                 .sortedByDescending { it.updatedAt }
 
-            val savedFavouriteAccounts = accountsDao.getFavouriteAccountsList()
+            accountsDao.getFavouriteAccountsList().test {
+                val savedFavorites = awaitItem()
+                assertThat(favouriteAccounts.size).isEqualTo(savedFavorites.size)
 
-            assertThat(favouriteAccounts.size).isEqualTo(savedFavouriteAccounts.size)
-
-            assertTrue(savedFavouriteAccounts.all { it.isFavourite })
-
-            favouriteAccounts.forEachIndexed { index, favrt ->
-                val savedFavouriteAccount = savedFavouriteAccounts[index]
-                assertThat(favrt.accountName).isEqualTo(savedFavouriteAccount.accountName)
-                assertThat(favrt.url).isEqualTo(savedFavouriteAccount.url)
+                assertTrue(savedFavorites.all { it.isFavourite })
+                favouriteAccounts.forEachIndexed { index, favrt ->
+                    val savedFavouriteAccount = savedFavorites[index]
+                    assertThat(favrt.accountName).isEqualTo(savedFavouriteAccount.accountName)
+                    assertThat(favrt.url).isEqualTo(savedFavouriteAccount.url)
+                }
             }
+
+
         }
     }
 

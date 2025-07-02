@@ -9,4 +9,40 @@
 
     <string name="warning_username_short">Username is too short</string>
     <string name="warning_password_short">Password is too short</string>
+
+    <string name="hint_account_name">Account name</string>
+    <string name="label_account_name">Enter account name</string>
+
+    <string name="hint_username">Enter username</string>
+    <string name="label_username">Account username</string>
+
+    <string name="hint_password">Enter password</string>
+    <string name="label_password">Account password</string>
+
+    <string name="hint_account_url">Url</string>
+    <string name="label_account_url">Enter url</string>
+
+    <string name="hint_account_notes">Notes</string>
+    <string name="label_account_notes">Enter notes</string>
+
+
+    <string name="hint_card_name">Card name</string>
+    <string name="label_card_name">Enter card name</string>
+
+    <string name="hint_card_number">Enter card number</string>
+    <string name="label_card_number">Account card number</string>
+
+    <string name="hint_card_holder_name">Enter card holder name</string>">
+    <string name="label_card_holder_name">Cardholder name</string>
+
+    <string name="hint_expiry_month">Exp Month</string>
+    <string name="label_expiry_month">MM</string>
+
+    <string name="hint_expiry_year">Exp Year</string>
+    <string name="label_expiry_year">YY</string>
+
+    <string name="hint_security_code">Security Code</string>
+    <string name="label_security_code">Security Code</string>
+    <string name="save_account">Save Account</string>
+
 </resources>

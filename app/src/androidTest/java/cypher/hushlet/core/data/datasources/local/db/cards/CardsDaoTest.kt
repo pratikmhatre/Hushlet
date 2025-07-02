@@ -4,6 +4,7 @@ import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.SmallTest
+import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import cypher.hushlet.core.data.datasources.local.db.HushletDb
 import junit.framework.TestCase.assertTrue
@@ -21,8 +22,7 @@ class CardsDaoTest {
 
     private fun createDatabase(): HushletDb {
         return Room.inMemoryDatabaseBuilder(
-            ApplicationProvider.getApplicationContext(),
-            HushletDb::class.java
+            ApplicationProvider.getApplicationContext(), HushletDb::class.java
         ).allowMainThreadQueries().build()
     }
 
@@ -309,8 +309,7 @@ class CardsDaoTest {
 
             assertThat(results.size).isEqualTo(cardsList.filter {
                 it.cardName.contains(
-                    searchQuery,
-                    ignoreCase = true
+                    searchQuery, ignoreCase = true
                 )
             }.size)
         }
@@ -339,8 +338,7 @@ class CardsDaoTest {
 
             assertThat(results.size).isEqualTo(cardsList.filter {
                 it.cardName.contains(
-                    searchQuery,
-                    ignoreCase = true
+                    searchQuery, ignoreCase = true
                 )
             }.size)
         }
@@ -354,23 +352,25 @@ class CardsDaoTest {
             cardsDao.addMultipleCard(activeCards)
 
             val favouriteCards =
-                cardsDao.getFavouriteCardsList().filter { it.isFavourite }.toMutableList()
-                    .sortedByDescending { it.updatedAt }
+                activeCards.filter { it.isFavourite }.toMutableList().sortedByDescending { it.updatedAt }
 
-            val savedFavouriteCards = cardsDao.getFavouriteCardsList()
 
-            assertThat(favouriteCards.size).isEqualTo(savedFavouriteCards.size)
+            cardsDao.getFavouriteCardsList().test {
+                val savedFavouriteCards = awaitItem()
 
-            assertTrue(savedFavouriteCards.all { it.isFavourite })
+                assertThat(favouriteCards.size).isEqualTo(savedFavouriteCards.size)
 
-            favouriteCards.forEachIndexed { index, favrt ->
-                val savedFavouriteCards = savedFavouriteCards[index]
-                assertThat(favrt.cardNumber).isEqualTo(savedFavouriteCards.cardNumber)
-                assertThat(favrt.cardName).isEqualTo(savedFavouriteCards.cardName)
-                assertThat(favrt.cardType).isEqualTo(savedFavouriteCards.cardType)
-                assertThat(favrt.cardHolderName).isEqualTo(savedFavouriteCards.cardHolderName)
-                assertThat(favrt.isFavourite).isEqualTo(savedFavouriteCards.isFavourite)
-                assertThat(favrt.updatedAt).isEqualTo(savedFavouriteCards.updatedAt)
+                assertTrue(savedFavouriteCards.all { it.isFavourite })
+
+                favouriteCards.forEachIndexed { index, favrt ->
+                    val savedFavouriteCards = savedFavouriteCards[index]
+                    assertThat(favrt.cardNumber).isEqualTo(savedFavouriteCards.cardNumber)
+                    assertThat(favrt.cardName).isEqualTo(savedFavouriteCards.cardName)
+                    assertThat(favrt.cardType).isEqualTo(savedFavouriteCards.cardType)
+                    assertThat(favrt.cardHolderName).isEqualTo(savedFavouriteCards.cardHolderName)
+                    assertThat(favrt.isFavourite).isEqualTo(savedFavouriteCards.isFavourite)
+                    assertThat(favrt.updatedAt).isEqualTo(savedFavouriteCards.updatedAt)
+                }
             }
         }
     }
@@ -409,8 +409,7 @@ class CardsDaoTest {
                 isArchived = false,
                 createdAt = System.currentTimeMillis(),
                 updatedAt = 100004
-            ),
-            CardEntity(
+            ), CardEntity(
                 id = 0,
                 cardNumber = "6543210987654321",
                 expiryMonth = "01",
@@ -424,8 +423,7 @@ class CardsDaoTest {
                 isArchived = false,
                 createdAt = System.currentTimeMillis(),
                 updatedAt = 100001
-            ),
-            CardEntity(
+            ), CardEntity(
                 id = 0,
                 cardNumber = "1112223334444555",
                 expiryMonth = "07",
@@ -439,8 +437,7 @@ class CardsDaoTest {
                 isArchived = false,
                 createdAt = System.currentTimeMillis(),
                 updatedAt = 100007
-            ),
-            CardEntity(
+            ), CardEntity(
                 id = 0,
                 cardNumber = "7890123456789012",
                 expiryMonth = "03",
@@ -454,8 +451,7 @@ class CardsDaoTest {
                 isArchived = false,
                 createdAt = System.currentTimeMillis(),
                 updatedAt = 100000
-            ),
-            CardEntity(
+            ), CardEntity(
                 id = 0,
                 cardNumber = "9876543210987654",
                 expiryMonth = "11",
@@ -489,8 +485,7 @@ class CardsDaoTest {
             isArchived = true,
             createdAt = System.currentTimeMillis(),
             updatedAt = System.currentTimeMillis()
-        ),
-        CardEntity(
+        ), CardEntity(
             id = 0,
             cardNumber = "7890123427632",
             expiryMonth = "03",
@@ -504,8 +499,7 @@ class CardsDaoTest {
             isArchived = true,
             createdAt = System.currentTimeMillis(),
             updatedAt = System.currentTimeMillis()
-        ),
-        CardEntity(
+        ), CardEntity(
             id = 0,
             cardNumber = "2783497237632",
             expiryMonth = "06",

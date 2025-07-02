@@ -3,6 +3,8 @@ package cypher.hushlet.core.domain.repositories.fake
 import cypher.hushlet.core.domain.models.AccountDto
 import cypher.hushlet.core.domain.models.AccountListItemDto
 import cypher.hushlet.core.domain.repositories.AccountsRepository
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
 
 class FakeAccountsRepositoryImpl : AccountsRepository {
     private val accounts = mutableListOf<AccountDto>()
@@ -43,8 +45,8 @@ class FakeAccountsRepositoryImpl : AccountsRepository {
         accounts.clear()
     }
 
-    override suspend fun getFavouriteAccounts(): List<AccountListItemDto> {
-        return accounts.filter { it.isFavourite }.map { it.toListItemDto() }
+    override suspend fun getFavouriteAccounts(): Flow<List<AccountListItemDto>> {
+        return flowOf(accounts.filter { it.isFavourite }.map { it.toListItemDto() })
     }
 
     override suspend fun getAllActiveAccounts(): List<AccountListItemDto> {
@@ -75,8 +77,8 @@ class FakeAccountsRepositoryImpl : AccountsRepository {
         }.map { it.toListItemDto() }
     }
 
-    override suspend fun getRecentlyAddedAccounts(count: Int): List<AccountListItemDto> {
-        return accounts.sortedByDescending { it.updatedAt }.take(count).map { it.toListItemDto() }
+    override suspend fun getRecentlyAddedAccounts(count: Int): Flow<List<AccountListItemDto>> {
+        return flowOf(accounts.sortedByDescending { it.updatedAt }.take(count).map { it.toListItemDto() })
     }
 
     override suspend fun checkIfAccountNameTaken(accName: String): Boolean =

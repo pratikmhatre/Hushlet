@@ -60,6 +60,7 @@ dependencies {
     ksp(libs.room.compiler)
 
     implementation(libs.hilt.android)
+    implementation(libs.hilt.compose)
     ksp(libs.hilt.compiler)
 
     debugImplementation(libs.androidx.ui.tooling)
@@ -79,5 +80,6 @@ dependencies {
     androidTestImplementation(libs.google.truth)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.ui.test.junit4)
+    androidTestImplementation(libs.turbine)
     androidTestImplementation(libs.mockk.android) // Use the -android artifact
 }

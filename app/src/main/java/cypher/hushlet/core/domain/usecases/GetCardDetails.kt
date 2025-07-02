@@ -5,5 +5,5 @@ import cypher.hushlet.core.domain.repositories.CardsRepository
 import javax.inject.Inject
 
 class GetCardDetails @Inject constructor(private val repository: CardsRepository) {
-    operator suspend fun invoke(id: Long): CardDto? = repository.getSingleCard(id)
+    suspend operator fun invoke(id: Long): CardDto? = repository.getSingleCard(id)
 }

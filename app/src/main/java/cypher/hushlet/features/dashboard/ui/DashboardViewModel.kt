@@ -8,13 +8,17 @@ import cypher.hushlet.core.domain.usecases.GetCardDetails
 import cypher.hushlet.features.dashboard.domain.usecases.GetDashboardData
 import cypher.hushlet.features.dashboard.ui.events.DashboardUiEvents
 import cypher.hushlet.features.dashboard.ui.events.DashboardUiState
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class DashboardViewModel constructor(
+@HiltViewModel
+class DashboardViewModel @Inject constructor(
     private val getDashboardData: GetDashboardData,
     private val getCardDetails: GetCardDetails,
     private val getAccountDetails: GetAccountDetails
@@ -32,12 +36,13 @@ class DashboardViewModel constructor(
     private fun fetchDashboardData() {
         viewModelScope.launch {
             _dashboardUiState.value = DashboardUiState.Loading
-            val dashboardData = getDashboardData.invoke()
-            if (dashboardData.cardSectionContent !is DashboardContent.NoContent || dashboardData.accountSectionContent !is DashboardContent.NoContent) {
-                _dashboardUiEvents.emit(DashboardUiEvents.HideEmptyState)
-                _dashboardUiState.emit(DashboardUiState.DashboardDataState(dashboardData))
-            } else {
-                _dashboardUiEvents.emit(DashboardUiEvents.ShowEmptyState)
+            getDashboardData.invoke().collectLatest {data ->
+                if (data.cardSectionContent !is DashboardContent.NoContent || data.accountSectionContent !is DashboardContent.NoContent) {
+                    _dashboardUiEvents.emit(DashboardUiEvents.HideEmptyState)
+                    _dashboardUiState.emit(DashboardUiState.DashboardDataState(data))
+                } else {
+                    _dashboardUiEvents.emit(DashboardUiEvents.ShowEmptyState)
+                }
             }
         }
     }
