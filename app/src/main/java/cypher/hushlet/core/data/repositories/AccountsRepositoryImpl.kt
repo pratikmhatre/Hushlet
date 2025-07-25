@@ -26,7 +26,7 @@ class AccountsRepositoryImpl @Inject constructor(private val accountsDao: Accoun
     override suspend fun getFavouriteAccounts(): Flow<List<AccountListItemDto>> =
         accountsDao.getFavouriteAccountsList()
 
-    override suspend fun getAllActiveAccounts(): List<AccountListItemDto> =
+    override suspend fun getAllActiveAccounts(): Flow<List<AccountListItemDto>> =
         accountsDao.getActiveAccountsList()
 
     override suspend fun getAllArchivedAccounts(): List<AccountListItemDto> =

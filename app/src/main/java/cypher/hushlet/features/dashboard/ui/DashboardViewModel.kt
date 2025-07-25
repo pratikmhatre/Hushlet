@@ -30,21 +30,36 @@ class DashboardViewModel @Inject constructor(
     val dashboardUiEvents = _dashboardUiEvents.asSharedFlow()
 
     init {
-        fetchDashboardData()
+//        fetchDashboardData()
+        fetchAccountsData()
     }
 
     private fun fetchDashboardData() {
         viewModelScope.launch {
             _dashboardUiState.value = DashboardUiState.Loading
-            getDashboardData.invoke().collectLatest {data ->
+            getDashboardData.invoke().collectLatest { data ->
                 if (data.cardSectionContent !is DashboardContent.NoContent || data.accountSectionContent !is DashboardContent.NoContent) {
-                    _dashboardUiEvents.emit(DashboardUiEvents.HideEmptyState)
                     _dashboardUiState.emit(DashboardUiState.DashboardDataState(data))
                 } else {
-                    _dashboardUiEvents.emit(DashboardUiEvents.ShowEmptyState)
                 }
             }
         }
+    }
+
+    private fun fetchAccountsData() {
+        viewModelScope.launch {
+            getDashboardData.getAllAccounts().collect {
+                if (it.isNotEmpty()) {
+                    _dashboardUiState.emit(DashboardUiState.AccountDataState(it))
+                } else {
+                    _dashboardUiState.emit(DashboardUiState.EmptyState)
+                }
+            }
+        }
+    }
+
+    fun onCopyButtonClicked() {
+        viewModelScope.launch { _dashboardUiEvents.emit(DashboardUiEvents.OnCopySuccessful) }
     }
 
     fun onCardSelected(cardId: Long) {

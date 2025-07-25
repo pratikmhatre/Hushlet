@@ -5,12 +5,16 @@ import cypher.hushlet.core.domain.models.CardListItemDto
 import cypher.hushlet.core.utils.AppConstants
 import cypher.hushlet.core.domain.repositories.AccountsRepository
 import cypher.hushlet.core.domain.repositories.CardsRepository
+import cypher.hushlet.features.dashboard.domain.models.AccountsListItem
 import cypher.hushlet.features.dashboard.domain.models.DashboardContent
 import cypher.hushlet.features.dashboard.domain.models.DashboardData
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapLatest
@@ -57,6 +61,24 @@ class GetDashboardData @Inject constructor(
                 cardData,
                 accData
             )
+        }
+    }
+
+    fun getAllAccounts(): Flow<List<AccountsListItem>> = flow {
+        val resultList = ArrayList<AccountsListItem>()
+        accountsRepository.getAllActiveAccounts().collect { accountsList ->
+            val sortedAccounts = accountsList.sortedBy {
+                it.accountName
+            }.groupBy {
+                it.accountName.first()
+            }
+            for (entry in sortedAccounts) {
+                resultList.add(AccountsListItem.SectionHeader(entry.key.toString()))
+                resultList.addAll(entry.value.map {
+                    AccountsListItem.AccountData(it)
+                })
+            }
+            emit(resultList)
         }
     }
 }

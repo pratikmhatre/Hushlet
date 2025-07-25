@@ -44,5 +44,6 @@
     <string name="hint_security_code">Security Code</string>
     <string name="label_security_code">Security Code</string>
     <string name="save_account">Save Account</string>
+    <string name="search_placeholder">Search Account</string>
 
 </resources>

@@ -31,7 +31,7 @@ interface AccountsDao {
     fun getFavouriteAccountsList(): Flow<List<AccountListItemDto>>
 
     @Query("SELECT id, accountName, url, isFavourite, updatedAt FROM ${AppConstants.ACCOUNT_TABLE} WHERE isArchived = 0 ORDER BY accountName ASC")
-    suspend fun getActiveAccountsList(): List<AccountListItemDto>
+    fun getActiveAccountsList(): Flow<List<AccountListItemDto>>
 
     @Query("SELECT id, accountName, url, isFavourite, updatedAt FROM ${AppConstants.ACCOUNT_TABLE} WHERE isArchived = 1 ORDER BY accountName ASC")
     suspend fun getArchivedAccountsList(): List<AccountListItemDto>

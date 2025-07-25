@@ -11,7 +11,7 @@ interface AccountsRepository {
     suspend fun deleteAccount(account: AccountDto): Int
     suspend fun deleteAllAccounts()
     suspend fun getFavouriteAccounts(): Flow<List<AccountListItemDto>>
-    suspend fun getAllActiveAccounts(): List<AccountListItemDto>
+    suspend fun getAllActiveAccounts(): Flow<List<AccountListItemDto>>
     suspend fun getAllArchivedAccounts(): List<AccountListItemDto>
     suspend fun getAccountDetails(id: Long): AccountDto?
     suspend fun searchActiveAccounts(query: String): List<AccountListItemDto>
