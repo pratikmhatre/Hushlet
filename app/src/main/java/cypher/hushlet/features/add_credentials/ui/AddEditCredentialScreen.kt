@@ -6,10 +6,8 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
@@ -19,6 +17,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -32,24 +31,44 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import cypher.hushlet.R
 import cypher.hushlet.features.add_credentials.ui.models.FormFieldState
+import cypher.hushlet.features.add_credentials.ui.states.UiEvent
 import cypher.hushlet.features.add_credentials.ui.states.UiState
 
 @Composable
-fun AddEditCredentialScreen(modifier: Modifier = Modifier, viewModel: AddEditCredentialsViewModel = hiltViewModel()) {
+fun AddEditCredentialScreen(
+    modifier: Modifier = Modifier,
+    accountId: Long?,
+    dismissDialog: () -> Unit,
+    viewModel: AddEditCredentialsViewModel = hiltViewModel()
+) {
+
+    accountId?.run {
+        viewModel.onAccountIdReceived(accountId)
+    }
+
     val uiState = viewModel.uiStateFlow.collectAsStateWithLifecycle()
 
-    val accountNameState = viewModel.accountNameState.value
-    val userNameState = viewModel.userNameState.value
-    val passwordState = viewModel.passwordState.value
-    val urlState = viewModel.urlState.value
-    val notesState = viewModel.notesState.value
+    val accountNameState = viewModel.accountNameState.collectAsStateWithLifecycle()
+    val userNameState = viewModel.userNameState.collectAsStateWithLifecycle()
+    val passwordState = viewModel.passwordState.collectAsStateWithLifecycle()
+    val urlState = viewModel.urlState.collectAsStateWithLifecycle()
+    val notesState = viewModel.notesState.collectAsStateWithLifecycle()
+    val cardNameState = viewModel.cardNameState.collectAsStateWithLifecycle()
+    val cardNumberState = viewModel.cardNumberState.collectAsStateWithLifecycle()
+    val cardHolderNameState = viewModel.cardHolderNameState.collectAsStateWithLifecycle()
+    val expMonthState = viewModel.expMonthState.collectAsStateWithLifecycle()
+    val expYearState = viewModel.expYearState.collectAsStateWithLifecycle()
+    val secCodeState = viewModel.secCodeState.collectAsStateWithLifecycle()
     val favouriteState = viewModel.favouriteState.value
-    val cardNameState = viewModel.cardNameState.value
-    val cardNumberState = viewModel.cardNumberState.value
-    val cardHolderNameState = viewModel.cardHolderNameState.value
-    val expMonthState = viewModel.expMonthState.value
-    val expYearState = viewModel.expYearState.value
-    val secCodeState = viewModel.secCodeState.value
+
+    LaunchedEffect(Unit) {
+        viewModel.uiEventFlow.collect { event ->
+            when (event) {
+                is UiEvent.OnDataSaved -> dismissDialog()
+            }
+        }
+    }
+
 
     Scaffold(modifier, containerColor = Color.White) { innerPadding ->
         Column(
@@ -58,18 +77,18 @@ fun AddEditCredentialScreen(modifier: Modifier = Modifier, viewModel: AddEditCre
                 .fillMaxWidth()
         ) {
             when (uiState.value) {
-                UiState.AddAccountState -> AccountSection(
+                UiState.AddAccountState, UiState.EditAccountState -> AccountSection(
                     modifier = Modifier,
-                    accountNameState = accountNameState,
+                    accountNameState = accountNameState.value,
                     onAccountNameChanged = viewModel::onAccountNameChanged,
                     onUserNameChanged = viewModel::onUserNameChanged,
                     onPasswordChanged = viewModel::onPasswordChanged,
                     onUrlChanged = viewModel::onUrlChanged,
                     onNotesChanged = viewModel::onNotesChanged,
-                    userNameState = userNameState,
-                    passwordState = passwordState,
-                    urlState = urlState,
-                    notesState = notesState,
+                    userNameState = userNameState.value,
+                    passwordState = passwordState.value,
+                    urlState = urlState.value,
+                    notesState = notesState.value,
                     favoriteState = favouriteState,
                     onFavoriteChanged = viewModel::onFavouriteChanged,
                     onSave = viewModel::onAccountSubmit
@@ -77,12 +96,12 @@ fun AddEditCredentialScreen(modifier: Modifier = Modifier, viewModel: AddEditCre
 
                 UiState.AddCardState -> CardSection(
                     modifier = Modifier,
-                    cardNameState = cardNameState,
-                    cardNumberState = cardNumberState,
-                    cardHolderNameState = cardHolderNameState,
-                    expiryMonthState = expMonthState,
-                    expiryYearState = expYearState,
-                    securityCodeState = secCodeState,
+                    cardNameState = cardNameState.value,
+                    cardNumberState = cardNumberState.value,
+                    cardHolderNameState = cardHolderNameState.value,
+                    expiryMonthState = expMonthState.value,
+                    expiryYearState = expYearState.value,
+                    securityCodeState = secCodeState.value,
                     onCardNameChanged = viewModel::onCardNameChanged,
                     onCardNumberChanged = viewModel::onCardNumberChanged,
                     onCardHolderNameChanged = viewModel::onCardHolderNameChanged,
@@ -92,7 +111,7 @@ fun AddEditCredentialScreen(modifier: Modifier = Modifier, viewModel: AddEditCre
                     onNotesChanged = viewModel::onNotesChanged,
                     favoriteState = favouriteState,
                     onFavoriteChanged = viewModel::onFavouriteChanged,
-                    notesState = notesState,
+                    notesState = notesState.value,
                     onSave = viewModel::onCardSubmit
                 )
 
@@ -323,7 +342,7 @@ private fun StandardInputPreview() {
             modifier = Modifier,
             labelText = "Username",
             hintText = "Enter Username",
-            state = FormFieldState(value = "@pnmhatre"),
+            state = FormFieldState(),
             isPasswordInput = false
         ) {
 

@@ -65,8 +65,8 @@ class GetDashboardData @Inject constructor(
     }
 
     fun getAllAccounts(): Flow<List<AccountsListItem>> = flow {
-        val resultList = ArrayList<AccountsListItem>()
         accountsRepository.getAllActiveAccounts().collect { accountsList ->
+            val resultList = ArrayList<AccountsListItem>()
             val sortedAccounts = accountsList.sortedBy {
                 it.accountName
             }.groupBy {
